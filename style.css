@@ -21,7 +21,16 @@ body {
 
 .stats-container {
     display: flex;
+    align-items: center; /* You can adjust to 'flex-start' or 'flex-end' as needed */
+    justify-content: center; /* Optional: center the items horizontally */
+    gap: 20px; /* Optional: spacing between stats cards */
 }
+
+.stats-container:hover {
+    cursor: pointer;
+    box-shadow: 0 0 30px lightblue;
+}
+
 
 .stats-card {
     background-color: #a8b0bc;

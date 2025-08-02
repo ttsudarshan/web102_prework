@@ -49,10 +49,6 @@ function addGamesToPage(games) {
 }
 
 
-// call the function we just defined using the correct variable
-// later, we'll call this function using a different list of games
-
-
 /*************************************************************************************
  * Challenge 4: Create the summary statistics at the top of the page displaying the
  * total number of contributions, amount donated, and number of games on the site.
@@ -62,20 +58,23 @@ function addGamesToPage(games) {
 // grab the contributions card element
 const contributionsCard = document.getElementById("num-contributions");
 
-// use reduce() to count the number of total contributions by summing the backers
-
-
-// set the inner HTML using a template literal and toLocaleString to get a number with commas
-
-
 // grab the amount raised card, then use reduce() to find the total amount raised
 const raisedCard = document.getElementById("total-raised");
 
-// set inner HTML using template literal
-
-
 // grab number of games card and set its inner HTML
 const gamesCard = document.getElementById("num-games");
+
+// Step 1: Total number of individual contributions
+const totalContributions = GAMES_JSON.reduce((acc, game) => acc + game.backers, 0);
+contributionsCard.innerHTML = totalContributions.toLocaleString(); // e.g., "25,676"
+
+// Step 2: Total amount pledged
+const totalPledged = GAMES_JSON.reduce((acc, game) => acc + game.pledged, 0);
+raisedCard.innerHTML = `$${totalPledged.toLocaleString()}`; // e.g., "$741,166"
+
+// Step 3: Total number of games
+const totalGames = GAMES_JSON.length;
+gamesCard.innerHTML = totalGames.toLocaleString(); // e.g., "11"
 
 
 /*************************************************************************************
@@ -155,5 +154,6 @@ const sortedGames =  GAMES_JSON.sort( (item1, item2) => {
 // create a new element to hold the name of the top pledge game, then append it to the correct element
 
 // do the same for the runner up item
-//just for test
+
+// just for test
 addGamesToPage(GAMES_JSON);

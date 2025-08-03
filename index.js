@@ -49,7 +49,6 @@ function addGamesToPage(games) {
             <img src="${game.img}" alt="${game.name}" class="game-img" />
             <h3>${game.name}</h3>
             <p>${game.description}</p>
-            <p><strong>Pledged:</strong> $${game.pledged.toLocaleString()}</p>
             <p><strong>Backers:</strong> ${game.backers.toLocaleString()}</p>
         `;
         gamesContainer.appendChild(gameCard);
@@ -82,7 +81,7 @@ gamesCard.innerHTML = totalGames.toLocaleString();
 function filterUnfundedOnly() {
     deleteChildElements(gamesContainer);
     const unfundedGames = GAMES_JSON.filter(game => game.pledged < game.goal);
-    console.log("Number of unfunded games:", unfundedGames.length);  // Secret Key component 1
+    console.log("Number of unfunded games:", unfundedGames.length);
     addGamesToPage(unfundedGames);
 }
 
@@ -90,7 +89,7 @@ function filterUnfundedOnly() {
 function filterFundedOnly() {
     deleteChildElements(gamesContainer);
     const fundedGames = GAMES_JSON.filter(game => game.pledged >= game.goal);
-    console.log("Number of funded games:", fundedGames.length);  // Secret Key component 2
+    console.log("Number of funded games:", fundedGames.length);
     addGamesToPage(fundedGames);
 }
 
@@ -100,7 +99,7 @@ function showAllGames() {
     addGamesToPage(GAMES_JSON);
 }
 
-// Connect buttons with event listeners (Secret Key component 4 = "click")
+// Connect buttons with event listeners
 unfundedBtn.addEventListener('click', filterUnfundedOnly);
 fundedBtn.addEventListener('click', filterFundedOnly);
 allBtn.addEventListener('click', showAllGames);
@@ -131,8 +130,12 @@ descriptionContainer.appendChild(summaryElement);
 // Sort games by pledged amount descending
 const sortedGames = [...GAMES_JSON].sort((a, b) => b.pledged - a.pledged);
 
-// Destructure top two games
+// Destructure top two games and the rest
 const [topGame, runnerUpGame, ...rest] = sortedGames;
+
+console.log("First word of most funded game:", topGame.name.split(" ")[0]); // Secret Key component 1
+console.log("First word of second most funded game:", runnerUpGame.name.split(" ")[0]); // Secret Key component 2
+console.log("Value of ...rest:", rest); // Secret Key component 3 (should be MAPLE)
 
 // Create and append top game name
 const topGameElement = document.createElement("p");
@@ -143,6 +146,32 @@ firstGameContainer.appendChild(topGameElement);
 const runnerUpElement = document.createElement("p");
 runnerUpElement.innerHTML = runnerUpGame.name;
 secondGameContainer.appendChild(runnerUpElement);
+
+// Bonus: Add search functionality
+const searchInput = document.createElement("input");
+searchInput.setAttribute("type", "text");
+searchInput.setAttribute("placeholder", "Search games...");
+searchInput.style.margin = "10px 0";
+searchInput.style.padding = "8px";
+searchInput.style.width = "200px";
+
+searchInput.addEventListener("input", (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    deleteChildElements(gamesContainer);
+    
+    if (searchTerm === "") {
+        addGamesToPage(GAMES_JSON);
+        return;
+    }
+
+    const filteredGames = GAMES_JSON.filter(game => 
+        game.name.toLowerCase().includes(searchTerm) || 
+        game.description.toLowerCase().includes(searchTerm)
+    );
+    addGamesToPage(filteredGames);
+});
+
+descriptionContainer.insertBefore(searchInput, descriptionContainer.firstChild);
 
 /*****************************************************************************
  * Initial render: show all games on page load
